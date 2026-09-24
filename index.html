@@ -818,3 +818,225 @@
 
 })();
 </script>
+<script>
+(function () {
+
+  function addAgeDetails() {
+
+    if (document.getElementById("extraAgeDetails")) return;
+
+    const birthdayCard = document.getElementById("birthdayCard");
+
+    if (!birthdayCard) return;
+
+    const card = document.createElement("div");
+
+    card.id = "extraAgeDetails";
+
+    card.className = "card";
+
+    card.style.cssText = `
+      margin-top:20px;
+      background:rgba(255,255,255,0.95);
+      border-radius:24px;
+      padding:25px;
+      box-shadow:0 12px 35px rgba(90,50,120,0.12);
+      display:none;
+    `;
+
+    card.innerHTML = `
+      <h2 style="
+        text-align:center;
+        color:#6a1b9a;
+        margin-bottom:20px;
+        font-size:23px;
+      ">
+        ✨ More About Your Age
+      </h2>
+
+      <div style="
+        display:grid;
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+      ">
+
+        <div style="
+          background:linear-gradient(135deg,#f7eaff,#fff3fa);
+          border-radius:16px;
+          padding:18px 10px;
+          text-align:center;
+        ">
+          <div style="font-size:28px;">📅</div>
+          <div id="birthDayName" style="
+            font-size:20px;
+            font-weight:bold;
+            color:#8e44ad;
+            margin-top:5px;
+          ">-</div>
+          <div style="font-size:13px;color:#777;margin-top:4px;">
+            Day You Were Born
+          </div>
+        </div>
+
+        <div style="
+          background:linear-gradient(135deg,#f7eaff,#fff3fa);
+          border-radius:16px;
+          padding:18px 10px;
+          text-align:center;
+        ">
+          <div style="font-size:28px;">🗓️</div>
+          <div id="totalMonths" style="
+            font-size:20px;
+            font-weight:bold;
+            color:#8e44ad;
+            margin-top:5px;
+          ">0</div>
+          <div style="font-size:13px;color:#777;margin-top:4px;">
+            Total Months
+          </div>
+        </div>
+
+        <div style="
+          background:linear-gradient(135deg,#f7eaff,#fff3fa);
+          border-radius:16px;
+          padding:18px 10px;
+          text-align:center;
+        ">
+          <div style="font-size:28px;">📚</div>
+          <div id="totalWeeks" style="
+            font-size:20px;
+            font-weight:bold;
+            color:#8e44ad;
+            margin-top:5px;
+          ">0</div>
+          <div style="font-size:13px;color:#777;margin-top:4px;">
+            Total Weeks
+          </div>
+        </div>
+
+        <div style="
+          background:linear-gradient(135deg,#f7eaff,#fff3fa);
+          border-radius:16px;
+          padding:18px 10px;
+          text-align:center;
+        ">
+          <div style="font-size:28px;">☀️</div>
+          <div id="totalDays" style="
+            font-size:20px;
+            font-weight:bold;
+            color:#8e44ad;
+            margin-top:5px;
+          ">0</div>
+          <div style="font-size:13px;color:#777;margin-top:4px;">
+            Total Days
+          </div>
+        </div>
+
+      </div>
+    `;
+
+    birthdayCard.insertAdjacentElement("afterend", card);
+
+    const calculateButton =
+      document.querySelector(".calculate-btn");
+
+    if (!calculateButton) return;
+
+    calculateButton.addEventListener("click", function () {
+
+      const input = document.getElementById("birthDate");
+
+      if (!input || !input.value) {
+        card.style.display = "none";
+        return;
+      }
+
+      const birthDate = new Date(input.value + "T00:00:00");
+      const today = new Date();
+
+      if (birthDate > today) {
+        card.style.display = "none";
+        return;
+      }
+
+      // Day of birth
+      const dayNames = [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday"
+      ];
+
+      document.getElementById("birthDayName").textContent =
+        dayNames[birthDate.getDay()];
+
+
+      // Exact total days
+      const todayStart = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate()
+      );
+
+      const birthStart = new Date(
+        birthDate.getFullYear(),
+        birthDate.getMonth(),
+        birthDate.getDate()
+      );
+
+      const millisecondsPerDay = 1000 * 60 * 60 * 24;
+
+      const totalDays = Math.floor(
+        (todayStart - birthStart) / millisecondsPerDay
+      );
+
+
+      // Total weeks
+      const totalWeeks = Math.floor(totalDays / 7);
+
+
+      // Completed total months
+      let totalMonths =
+        (todayStart.getFullYear() - birthStart.getFullYear()) * 12 +
+        (todayStart.getMonth() - birthStart.getMonth());
+
+      if (todayStart.getDate() < birthStart.getDate()) {
+        totalMonths--;
+      }
+
+
+      document.getElementById("totalDays").textContent =
+        totalDays.toLocaleString();
+
+      document.getElementById("totalWeeks").textContent =
+        totalWeeks.toLocaleString();
+
+      document.getElementById("totalMonths").textContent =
+        totalMonths.toLocaleString();
+
+
+      card.style.display = "block";
+
+    });
+
+  }
+
+
+  if (document.readyState === "loading") {
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      addAgeDetails
+    );
+
+  } else {
+
+    addAgeDetails();
+
+  }
+
+})();
+      </script>
