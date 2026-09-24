@@ -682,3 +682,139 @@
 
 </body>
   </html>
+<script>
+(function () {
+
+  // Create extra buttons
+  const resultBox = document.getElementById("result");
+
+  if (!resultBox) return;
+
+  const actionBox = document.createElement("div");
+
+  actionBox.style.cssText = `
+    display:flex;
+    gap:10px;
+    margin-top:18px;
+    flex-wrap:wrap;
+  `;
+
+  actionBox.innerHTML = `
+    <button
+      type="button"
+      id="copyAgeBtn"
+      style="
+        flex:1;
+        min-width:140px;
+        border:none;
+        padding:13px 16px;
+        border-radius:12px;
+        background:#f1e7f6;
+        color:#6a1b9a;
+        font-size:15px;
+        font-weight:bold;
+        cursor:pointer;
+      "
+    >
+      📋 Copy Result
+    </button>
+
+    <button
+      type="button"
+      id="shareAgeBtn"
+      style="
+        flex:1;
+        min-width:140px;
+        border:none;
+        padding:13px 16px;
+        border-radius:12px;
+        background:#8e44ad;
+        color:white;
+        font-size:15px;
+        font-weight:bold;
+        cursor:pointer;
+      "
+    >
+      📤 Share Result
+    </button>
+  `;
+
+  resultBox.appendChild(actionBox);
+
+
+  // Copy result
+  document.getElementById("copyAgeBtn").addEventListener("click", async function () {
+
+    const years = document.getElementById("years").textContent;
+    const months = document.getElementById("months").textContent;
+    const days = document.getElementById("days").textContent;
+
+    const text =
+      `My exact age is ${years} years, ${months} months and ${days} days. 🎂`;
+
+    try {
+
+      await navigator.clipboard.writeText(text);
+
+      this.textContent = "✅ Copied!";
+
+      setTimeout(() => {
+        this.textContent = "📋 Copy Result";
+      }, 1800);
+
+    } catch (error) {
+
+      alert("Unable to copy. Please copy the result manually.");
+
+    }
+
+  });
+
+
+  // Share result
+  document.getElementById("shareAgeBtn").addEventListener("click", async function () {
+
+    const years = document.getElementById("years").textContent;
+    const months = document.getElementById("months").textContent;
+    const days = document.getElementById("days").textContent;
+
+    const text =
+      `My exact age is ${years} years, ${months} months and ${days} days! 🎂✨`;
+
+    if (navigator.share) {
+
+      try {
+
+        await navigator.share({
+          title: "My Age Calculator Result",
+          text: text
+        });
+
+      } catch (error) {
+        // User closed the share window
+      }
+
+    } else {
+
+      try {
+
+        await navigator.clipboard.writeText(text);
+
+        this.textContent = "✅ Copied!";
+
+        setTimeout(() => {
+          this.textContent = "📤 Share Result";
+        }, 1800);
+
+      } catch (error) {
+
+        alert(text);
+
+      }
+
+    }
+
+  });
+
+})();
+</script>
